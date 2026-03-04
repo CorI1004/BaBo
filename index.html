@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>간단한 게시판</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        padding: 40px;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 8px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 14px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        opacity: 0.9;
+    }
+
+    .post {
+        border-top: 1px solid #ddd;
+        padding: 15px 0;
+        position: relative;
+    }
+
+    .post-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .post-date {
+        font-size: 12px;
+        color: gray;
+        margin-top: 5px;
+    }
+
+    .btn-group {
+        position: absolute;
+        right: 0;
+        top: 10px;
+    }
+
+    .delete-btn {
+        background-color: red;
+        margin-left: 5px;
+    }
+
+    .edit-btn {
+        background-color: orange;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📋 간단한 게시판</h1>
+
+    <input type="text" id="title" placeholder="제목 입력">
+    <textarea id="content" rows="4" placeholder="내용 입력"></textarea>
+    <button onclick="addPost()">글 작성</button>
+
+    <div id="postList"></div>
+</div>
+
+<script>
+function addPost() {
+    const title = document.getElementById("title").value;
+    const content = document.getElementById("content").value;
+
+    if (title === "" || content === "") {
+        alert("제목과 내용을 입력하세요!");
+        return;
+    }
+
+    const postList = document.getElementById("postList");
+    const postDiv = document.createElement("div");
+    postDiv.className = "post";
+
+    const date = new Date().toLocaleString();
+
+    postDiv.innerHTML = `
+        <div class="btn-group">
+            <button class="edit-btn" onclick="editPost(this)">수정</button>
+            <button class="delete-btn" onclick="deletePost(this)">삭제</button>
+        </div>
+        <div class="post-title">${title}</div>
+        <div class="post-content">${content}</div>
+        <div class="post-date">${date}</div>
+    `;
+
+    postList.prepend(postDiv);
+
+    document.getElementById("title").value = "";
+    document.getElementById("content").value = "";
+}
+
+function deletePost(button) {
+    button.closest(".post").remove();
+}
+
+function editPost(button) {
+    const post = button.closest(".post");
+    const title = post.querySelector(".post-title");
+    const content = post.querySelector(".post-content");
+
+    const newTitle = prompt("새 제목 입력:", title.innerText);
+    const newContent = prompt("새 내용 입력:", content.innerText);
+
+    if (newTitle !== null && newContent !== null) {
+        title.innerText = newTitle;
+        content.innerText = newContent;
+    }
+}
+</script>
+
+</body>
+</html>
